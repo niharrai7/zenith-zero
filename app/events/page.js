@@ -1,120 +1,154 @@
+"use client";
+
+import Link from "next/link";
+
 const events = [
   {
-    name: "Zenith Quiz Arena",
-    type: "LIVE QUIZ",
-    date: "Coming Soon",
-    teams: "Team Competition",
+    id: 1,
+    title: "Zenith Quiz Arena",
+    category: "QUIZ",
+    description:
+      "Test your technical knowledge through a fast-paced live quiz competition.",
+    teams: "2 - 4 Members",
+    format: "Live Competition",
+    status: "Open",
   },
   {
-    name: "Cyber Challenge",
-    type: "CYBER",
-    date: "Coming Soon",
-    teams: "Team Competition",
+    id: 2,
+    title: "Cyber Challenge",
+    category: "CYBERSECURITY",
+    description:
+      "Solve security-focused challenges and demonstrate your problem-solving skills.",
+    teams: "1 - 4 Members",
+    format: "Challenge",
+    status: "Open",
   },
   {
-    name: "Tech Trivia",
-    type: "TECH",
-    date: "Coming Soon",
-    teams: "Individual / Team",
+    id: 3,
+    title: "Tech Trivia",
+    category: "TECHNOLOGY",
+    description:
+      "Compete across programming, technology, startups and computer science.",
+    teams: "1 - 3 Members",
+    format: "Trivia",
+    status: "Coming Soon",
   },
 ];
 
-export default function Events() {
+export default function EventsPage() {
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-[#050505] text-white">
+      {/* Navigation */}
+      <nav className="border-b border-white/10">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8">
+          <Link
+            href="/"
+            className="text-xl font-black tracking-tight sm:text-2xl"
+          >
+            ZENITH<span className="text-white/40">ZERO</span>
+          </Link>
 
-      {/* Navbar */}
-      <nav className="flex items-center justify-between border-b border-white/10 px-8 py-6">
+          <div className="flex items-center gap-4 text-sm sm:gap-8">
+            <Link href="/" className="text-white/50 hover:text-white">
+              Home
+            </Link>
 
-        <a href="/" className="text-2xl font-bold tracking-wider">
-          ZENITH<span className="text-cyan-400">ZERO</span>
-        </a>
+            <Link href="/events" className="font-semibold text-white">
+              Events
+            </Link>
 
-        <div className="flex items-center gap-8 text-sm text-gray-300">
-          <a href="/" className="hover:text-cyan-400">
-            Home
-          </a>
-
-          <a href="/events" className="text-cyan-400">
-            Events
-          </a>
-
-          <a href="#" className="hover:text-cyan-400">
-            Leaderboard
-          </a>
-
-          <a href="#" className="hover:text-cyan-400">
-            Certificates
-          </a>
+            <Link
+              href="/organizer"
+              className="hidden text-white/50 hover:text-white sm:block"
+            >
+              Organizer
+            </Link>
+          </div>
         </div>
-
       </nav>
 
       {/* Header */}
-      <section className="px-6 py-20">
-        <div className="mx-auto max-w-6xl">
-
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">
-            Explore
+      <section className="mx-auto max-w-7xl px-5 pb-10 pt-12 sm:px-8 sm:pb-14 sm:pt-16">
+        <div className="max-w-3xl">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-white/40">
+            Discover & Compete
           </p>
 
-          <h1 className="mt-3 text-5xl font-black">
+          <h1 className="text-4xl font-black tracking-tight sm:text-6xl">
             Upcoming Events
           </h1>
 
-          <p className="mt-5 max-w-2xl text-gray-400">
-            Discover competitions, build your team, and enter the arena.
+          <p className="mt-5 max-w-2xl text-sm leading-7 text-white/50 sm:text-base">
+            Find technical competitions, quizzes and challenges. Build your
+            team, join an event and compete.
           </p>
-
         </div>
       </section>
 
-      {/* Event Cards */}
-      <section className="px-6 pb-24">
-
-        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2 lg:grid-cols-3">
-
+      {/* Events */}
+      <section className="mx-auto max-w-7xl px-5 pb-20 sm:px-8">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {events.map((event) => (
-            <div
-              key={event.name}
-              className="rounded-3xl border border-white/10 bg-white/[0.03] p-7 transition hover:-translate-y-1 hover:border-cyan-400/40"
+            <article
+              key={event.id}
+              className="group flex min-h-[390px] flex-col rounded-3xl border border-white/10 bg-white/[0.03] p-6 transition duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.05] sm:p-7"
             >
-
-              <div className="flex items-center justify-between">
-
-                <span className="rounded-full border border-cyan-400/30 px-3 py-1 text-xs font-semibold text-cyan-400">
-                  {event.type}
+              <div className="flex items-center justify-between gap-4">
+                <span className="rounded-full border border-white/10 px-3 py-1 text-[10px] font-bold tracking-widest text-white/50">
+                  {event.category}
                 </span>
 
-                <span className="text-xs text-gray-500">
-                  UPCOMING
+                <span
+                  className={`text-[10px] font-bold uppercase tracking-widest ${
+                    event.status === "Open"
+                      ? "text-green-400"
+                      : "text-white/30"
+                  }`}
+                >
+                  ● {event.status}
                 </span>
-
               </div>
 
-              <h2 className="mt-8 text-2xl font-bold">
-                {event.name}
-              </h2>
+              <div className="mt-8 flex-1">
+                <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                  {event.title}
+                </h2>
 
-              <div className="mt-6 space-y-3 text-sm text-gray-400">
-                <p>📅 {event.date}</p>
-                <p>👥 {event.teams}</p>
+                <p className="mt-4 text-sm leading-7 text-white/45">
+                  {event.description}
+                </p>
+
+                <div className="mt-7 grid grid-cols-2 gap-3">
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/30">
+                      Team Size
+                    </p>
+                    <p className="mt-2 text-sm font-semibold">
+                      {event.teams}
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/30">
+                      Format
+                    </p>
+                    <p className="mt-2 text-sm font-semibold">
+                      {event.format}
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <a
-  href="/events/event"
-  className="mt-8 block w-full rounded-xl border border-white/10 py-3 text-center font-semibold transition hover:border-cyan-400 hover:text-cyan-400"
->
-  View Event
-</a>
-
-            </div>
+              <Link
+                href="/events/event"
+                className="mt-7 flex w-full items-center justify-center rounded-2xl bg-white px-5 py-3.5 text-sm font-bold text-black transition hover:bg-white/90"
+              >
+                View Event
+              </Link>
+            </article>
           ))}
-
         </div>
-
       </section>
-
     </main>
   );
 }
