@@ -1,19 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
-export default function TeamLobby() {
-  const [teamCode] = useState("ZZU3ABD");
+const teamMembers = [
+  {
+    name: "ni",
+    email: "mnihar100@gmail.com",
+    role: "CAPTAIN",
+  },
+];
+
+export default function TeamLobbyPage() {
   const [copied, setCopied] = useState(false);
 
-  const team = {
-    name: "nivi",
-    captain: "ni",
-    email: "mnihar100@gmail.com",
-    competition: "Zenith Quiz Arena",
-    format: "Live Competition",
-    teamSize: "2 - 4",
-  };
+  const teamCode = "ZZU3ABD";
+  const maxMembers = 4;
 
   const copyTeamCode = async () => {
     try {
@@ -24,176 +26,213 @@ export default function TeamLobby() {
         setCopied(false);
       }, 2000);
     } catch {
-      alert("Copy failed. Please copy the code manually.");
+      setCopied(false);
     }
-  };
-
-  const startCompetition = () => {
-    alert("Competition will start once your team is ready!");
   };
 
   return (
     <main className="min-h-screen bg-[#050505] text-white">
-      {/* Header */}
-      <header className="border-b border-white/10 bg-black/80">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-          <a
+      {/* Navigation */}
+      <nav className="border-b border-white/10">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
+          <Link
             href="/"
-            className="text-xl font-black tracking-[0.25em] text-white"
+            className="text-xl font-black tracking-tight"
           >
-            ZENITHZERO
-          </a>
+            ZENITH<span className="text-white/40">ZERO</span>
+          </Link>
 
-          <nav className="flex gap-6 text-sm text-gray-400">
-            <a href="/" className="transition hover:text-white">
-              Home
-            </a>
-            <a href="/events" className="transition hover:text-white">
-              Events
-            </a>
-          </nav>
+          <Link
+            href="/events"
+            className="text-sm text-white/50 transition hover:text-white"
+          >
+            ← Events
+          </Link>
         </div>
-      </header>
+      </nav>
 
-      {/* Main */}
-      <section className="mx-auto max-w-5xl px-6 py-12">
-        {/* Title */}
-        <div className="mb-10">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">
-            Team Lobby
-          </p>
+      <section className="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-16">
+        {/* Header */}
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/30">
+              Competition Lobby
+            </p>
 
-          <h1 className="text-4xl font-black tracking-tight md:text-5xl">
-            {team.name}
-          </h1>
+            <h1 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+              Team Lobby
+            </h1>
 
-          <p className="mt-3 text-gray-400">
-            Your team is ready. Share the code and invite your teammates.
-          </p>
+            <p className="mt-3 text-sm text-white/40">
+              Your team is ready. Invite teammates before starting.
+            </p>
+          </div>
+
+          <span className="w-fit rounded-full border border-yellow-400/20 bg-yellow-400/5 px-4 py-2 text-xs font-bold uppercase tracking-widest text-yellow-300">
+            ● Waiting
+          </span>
         </div>
 
-        {/* Team Code */}
-        <div className="mb-8 rounded-2xl border border-cyan-400/20 bg-cyan-400/5 p-6">
-          <p className="mb-2 text-sm text-gray-400">Team Code</p>
+        <div className="mt-10 grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
+          {/* Main team card */}
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+            <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-start">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-widest text-white/30">
+                  Team Name
+                </p>
 
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="text-4xl font-black tracking-[0.25em] text-cyan-300">
-              {teamCode}
+                <h2 className="mt-2 text-3xl font-bold">
+                  nivi
+                </h2>
+              </div>
+
+              <div className="sm:text-right">
+                <p className="text-xs font-bold uppercase tracking-widest text-white/30">
+                  Members
+                </p>
+
+                <p className="mt-2 text-2xl font-black">
+                  {teamMembers.length}
+                  <span className="text-white/25"> / {maxMembers}</span>
+                </p>
+              </div>
+            </div>
+
+            {/* Progress */}
+            <div className="mt-7 h-2 overflow-hidden rounded-full bg-white/10">
+              <div
+                className="h-full rounded-full bg-white transition-all"
+                style={{
+                  width: `${(teamMembers.length / maxMembers) * 100}%`,
+                }}
+              />
+            </div>
+
+            {/* Members */}
+            <div className="mt-8">
+              <p className="text-xs font-bold uppercase tracking-widest text-white/30">
+                Team Members
+              </p>
+
+              <div className="mt-4 space-y-3">
+                {teamMembers.map((member) => (
+                  <div
+                    key={member.email}
+                    className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 p-4"
+                  >
+                    <div className="flex min-w-0 items-center gap-4">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-sm font-black text-black">
+                        {member.name.charAt(0).toUpperCase()}
+                      </div>
+
+                      <div className="min-w-0">
+                        <p className="font-semibold">
+                          {member.name}
+                        </p>
+
+                        <p className="truncate text-xs text-white/35">
+                          {member.email}
+                        </p>
+                      </div>
+                    </div>
+
+                    <span className="hidden rounded-full border border-white/10 px-3 py-1 text-[9px] font-bold tracking-widest text-white/40 sm:block">
+                      {member.role}
+                    </span>
+                  </div>
+                ))}
+
+                {/* Empty slots */}
+                {Array.from({
+                  length: maxMembers - teamMembers.length,
+                }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-4 rounded-2xl border border-dashed border-white/10 p-4"
+                  >
+                    <div className="flex h-11 w-11 items-center justify-center rounded-full border border-dashed border-white/15 text-white/20">
+                      +
+                    </div>
+
+                    <div>
+                      <p className="text-sm font-semibold text-white/25">
+                        Waiting for teammate
+                      </p>
+
+                      <p className="mt-1 text-xs text-white/15">
+                        Share the team code to invite someone.
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Team code */}
+            <div className="mt-8 rounded-2xl border border-white/10 bg-black/30 p-5">
+              <p className="text-xs font-bold uppercase tracking-widest text-white/30">
+                Team Code
+              </p>
+
+              <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <div className="flex-1 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-center font-mono text-lg font-bold tracking-[0.25em]">
+                  {teamCode}
+                </div>
+
+                <button
+                  onClick={copyTeamCode}
+                  className="rounded-xl bg-white px-5 py-3 text-sm font-bold text-black transition hover:bg-white/90"
+                >
+                  {copied ? "Copied!" : "Copy Code"}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Competition details */}
+          <aside className="h-fit rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-white/30">
+              Competition
+            </p>
+
+            <h2 className="mt-4 text-2xl font-bold">
+              Zenith Quiz Arena
+            </h2>
+
+            <div className="mt-7 space-y-5">
+              <Detail label="Format" value="Live Competition" />
+              <Detail label="Team Size" value="2 - 4 Members" />
+              <Detail label="Status" value="Waiting for teammates" />
             </div>
 
             <button
-              onClick={copyTeamCode}
-              className="rounded-xl bg-white px-5 py-3 font-bold text-black transition hover:bg-gray-200"
+              onClick={() =>
+                alert("Waiting for all required teammates to join.")
+              }
+              className="mt-8 w-full rounded-2xl bg-white px-5 py-4 text-sm font-bold text-black transition hover:bg-white/90"
             >
-              {copied ? "Copied ✓" : "Copy Team Code"}
+              Start Competition
             </button>
-          </div>
 
-          <p className="mt-4 text-sm text-gray-500">
-            Share this code with your teammates.
-          </p>
-        </div>
-
-        {/* Grid */}
-        <div className="grid gap-6 md:grid-cols-2">
-          {/* Members */}
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-bold">Team Members</h2>
-
-              <span className="rounded-full bg-white/10 px-3 py-1 text-sm text-gray-300">
-                1 / 4
-              </span>
-            </div>
-
-            <div className="rounded-xl border border-white/10 bg-black/40 p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-bold">{team.captain}</p>
-                  <p className="text-sm text-gray-500">{team.email}</p>
-                </div>
-
-                <span className="rounded-full bg-cyan-400/10 px-3 py-1 text-xs font-bold text-cyan-300">
-                  CAPTAIN
-                </span>
-              </div>
-            </div>
-
-            {/* Empty slots */}
-            <div className="mt-3 space-y-2">
-              {[2, 3, 4].map((slot) => (
-                <div
-                  key={slot}
-                  className="rounded-xl border border-dashed border-white/10 p-4 text-sm text-gray-600"
-                >
-                  Waiting for teammate...
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Competition */}
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-            <h2 className="mb-6 text-xl font-bold">Competition</h2>
-
-            <div className="space-y-5">
-              <div>
-                <p className="text-xs uppercase tracking-wider text-gray-500">
-                  Event
-                </p>
-                <p className="mt-1 font-semibold">{team.competition}</p>
-              </div>
-
-              <div>
-                <p className="text-xs uppercase tracking-wider text-gray-500">
-                  Format
-                </p>
-                <p className="mt-1 font-semibold">{team.format}</p>
-              </div>
-
-              <div>
-                <p className="text-xs uppercase tracking-wider text-gray-500">
-                  Team Size
-                </p>
-                <p className="mt-1 font-semibold">{team.teamSize}</p>
-              </div>
-
-              <div>
-                <p className="text-xs uppercase tracking-wider text-gray-500">
-                  Status
-                </p>
-
-                <span className="mt-2 inline-flex rounded-full bg-yellow-400/10 px-3 py-1 text-sm font-semibold text-yellow-300">
-                  Waiting
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Waiting */}
-        <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-cyan-400/10 text-2xl">
-            👥
-          </div>
-
-          <h2 className="text-2xl font-bold">
-            Waiting for teammates
-          </h2>
-
-          <p className="mx-auto mt-2 max-w-md text-gray-500">
-            Share your team code with your teammates. Once your team is ready,
-            you can start the competition.
-          </p>
-
-          <button
-            onClick={startCompetition}
-            className="mt-6 rounded-xl bg-cyan-400 px-8 py-3 font-black text-black transition hover:bg-cyan-300"
-          >
-            Start Competition
-          </button>
+            <Link
+              href="/events"
+              className="mt-3 flex w-full items-center justify-center rounded-2xl border border-white/10 px-5 py-4 text-sm font-semibold text-white/60 transition hover:bg-white/5 hover:text-white"
+            >
+              Leave Lobby
+            </Link>
+          </aside>
         </div>
       </section>
     </main>
+  );
+}
+
+function Detail({ label, value }) {
+  return (
+    <div>
+      <p className="text-xs text-white/30">{label}</p>
+      <p className="mt-1 text-sm font-semibold">{value}</p>
+    </div>
   );
 }
