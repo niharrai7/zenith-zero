@@ -1,322 +1,191 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import Link from "next/link";
 
-export default function OrganizerDashboard() {
-  const [competition, setCompetition] = useState(null);
-  const [rounds, setRounds] = useState([]);
+const stats = [
+  { label: "Total Events", value: "03" },
+  { label: "Active Teams", value: "12" },
+  { label: "Participants", value: "48" },
+  { label: "Live Events", value: "01" },
+];
 
-  useEffect(() => {
-    const savedCompetition =
-      localStorage.getItem("zenithCompetition");
+const events = [
+  {
+    name: "Zenith Quiz Arena",
+    type: "Live Competition",
+    teams: "8 teams",
+    status: "LIVE",
+  },
+  {
+    name: "Cyber Challenge",
+    type: "Technical Challenge",
+    teams: "3 teams",
+    status: "OPEN",
+  },
+  {
+    name: "Tech Trivia",
+    type: "Trivia",
+    teams: "1 team",
+    status: "DRAFT",
+  },
+];
 
-    const savedRounds =
-      localStorage.getItem("zenithRounds");
-
-    if (savedCompetition) {
-      setCompetition(JSON.parse(savedCompetition));
-    }
-
-    if (savedRounds) {
-      setRounds(JSON.parse(savedRounds));
-    }
-  }, []);
-
+export default function OrganizerPage() {
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-[#050505] text-white">
+      <nav className="border-b border-white/10">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8">
+          <Link
+            href="/"
+            className="text-xl font-black tracking-tight"
+          >
+            ZENITH<span className="text-white/40">ZERO</span>
+          </Link>
 
-      {/* NAVBAR */}
-
-      <nav className="flex items-center justify-between border-b border-white/10 px-8 py-6">
-
-        <a
-          href="/"
-          className="text-2xl font-bold tracking-wider"
-        >
-          ZENITH<span className="text-cyan-400">ZERO</span>
-        </a>
-
-        <a
-          href="/events"
-          className="text-sm text-gray-400 transition hover:text-cyan-400"
-        >
-          Events
-        </a>
-
+          <Link
+            href="/events"
+            className="text-sm text-white/50 transition hover:text-white"
+          >
+            View Events →
+          </Link>
+        </div>
       </nav>
 
+      <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-16">
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/30">
+              Organizer Console
+            </p>
 
-      {/* HEADER */}
+            <h1 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+              Dashboard
+            </h1>
 
-      <section className="px-6 py-16">
-
-        <div className="mx-auto max-w-6xl">
-
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">
-            Organizer Dashboard
-          </p>
-
-          <h1 className="mt-4 text-5xl font-black">
-            Competition Control
-          </h1>
-
-          <p className="mt-4 text-gray-400">
-            Manage your competition from one place.
-          </p>
-
-
-          {/* COMPETITION */}
-
-          <div className="mt-12 rounded-3xl border border-white/10 bg-white/[0.03] p-8">
-
-            {competition ? (
-
-              <>
-
-                <div className="flex flex-col justify-between gap-6 md:flex-row">
-
-                  <div>
-
-                    <p className="text-sm text-cyan-400">
-                      COMPETITION
-                    </p>
-
-                    <h2 className="mt-3 text-3xl font-bold">
-                      {competition.name}
-                    </h2>
-
-                    <p className="mt-4 max-w-2xl leading-7 text-gray-400">
-                      {competition.description}
-                    </p>
-
-                  </div>
-
-
-                  <div className="flex gap-3">
-
-                    <span className="h-fit rounded-full border border-cyan-400/30 px-4 py-2 text-sm text-cyan-400">
-                      {competition.mode}
-                    </span>
-
-                    <span className="h-fit rounded-full border border-white/10 px-4 py-2 text-sm text-gray-400">
-                      {competition.teamSize}
-                    </span>
-
-                  </div>
-
-                </div>
-
-
-                {/* STATS */}
-
-                <div className="mt-10 grid gap-4 sm:grid-cols-3">
-
-                  <Stat
-                    label="Rounds"
-                    value={rounds.length}
-                  />
-
-                  <Stat
-                    label="Participants"
-                    value="0"
-                  />
-
-                  <Stat
-                    label="Status"
-                    value="DRAFT"
-                  />
-
-                </div>
-
-              </>
-
-            ) : (
-
-              <div>
-
-                <h2 className="text-2xl font-bold">
-                  No Competition Found
-                </h2>
-
-                <p className="mt-3 text-gray-500">
-                  Create a competition first.
-                </p>
-
-                <a
-                  href="/organizer/create"
-                  className="mt-6 inline-block rounded-xl bg-cyan-400 px-6 py-3 font-bold text-black"
-                >
-                  Create Competition
-                </a>
-
-              </div>
-
-            )}
-
+            <p className="mt-3 text-sm text-white/40">
+              Manage competitions, teams and event activity.
+            </p>
           </div>
 
-
-          {/* ROUNDS */}
-
-          <div className="mt-8">
-
-            <div className="flex items-center justify-between">
-
-              <div>
-
-                <p className="text-sm text-gray-500">
-                  COMPETITION STRUCTURE
-                </p>
-
-                <h2 className="mt-2 text-2xl font-bold">
-                  Rounds
-                </h2>
-
-              </div>
-
-              <a
-                href="/organizer/create/rounds"
-                className="rounded-xl border border-white/10 px-5 py-3 text-sm font-semibold transition hover:border-cyan-400 hover:text-cyan-400"
-              >
-                Edit Rounds
-              </a>
-
-            </div>
-
-
-            {rounds.length > 0 ? (
-
-              <div className="mt-6 space-y-4">
-
-                {rounds.map((round, index) => (
-
-                  <div
-                    key={round.id}
-                    className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.03] p-6"
-                  >
-
-                    <div className="flex items-center gap-5">
-
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400/10 font-mono text-sm text-cyan-400">
-                        0{index + 1}
-                      </div>
-
-                      <div>
-
-                        <h3 className="font-bold">
-                          {round.name}
-                        </h3>
-
-                        <p className="mt-1 text-sm text-gray-500">
-                          {round.description}
-                        </p>
-
-                      </div>
-
-                    </div>
-
-
-                    {round.id === "buzzer" && (
-                      <span className="hidden rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-400 sm:block">
-                        LIVE
-                      </span>
-                    )}
-
-                  </div>
-
-                ))}
-
-              </div>
-
-            ) : (
-
-              <div className="mt-6 rounded-2xl border border-dashed border-white/10 p-8 text-center">
-
-                <p className="text-gray-500">
-                  No rounds configured yet.
-                </p>
-
-                <a
-                  href="/organizer/create/rounds"
-                  className="mt-4 inline-block text-cyan-400 hover:underline"
-                >
-                  Add rounds →
-                </a>
-
-              </div>
-
-            )}
-
-          </div>
-
-
-          {/* ACTIONS */}
-
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-
-            <DashboardAction
-              title="Manage Questions"
-              description="Add questions to your competition rounds."
-            />
-
-            <DashboardAction
-              title="Manage Teams"
-              description="View registered teams and participants."
-            />
-
-            <DashboardAction
-              title="Launch Competition"
-              description="Start the live competition when ready."
-            />
-
-          </div>
-
+          <Link
+            href="/organizer/create"
+            className="w-fit rounded-2xl bg-white px-5 py-3.5 text-sm font-bold text-black transition hover:bg-white/90"
+          >
+            + Create Event
+          </Link>
         </div>
 
+        {/* Stats */}
+        <div className="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {stats.map((stat) => (
+            <div
+              key={stat.label}
+              className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-6"
+            >
+              <p className="text-[10px] font-bold uppercase tracking-widest text-white/30">
+                {stat.label}
+              </p>
+
+              <p className="mt-3 text-3xl font-black">
+                {stat.value}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Events */}
+        <div className="mt-10 rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-8">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-bold">
+                Your Events
+              </h2>
+
+              <p className="mt-1 text-sm text-white/35">
+                Monitor and manage your competitions.
+              </p>
+            </div>
+
+            <span className="hidden text-xs text-white/25 sm:block">
+              {events.length} events
+            </span>
+          </div>
+
+          <div className="mt-6 space-y-3">
+            {events.map((event) => (
+              <div
+                key={event.name}
+                className="flex flex-col gap-5 rounded-2xl border border-white/10 bg-black/20 p-5 transition hover:border-white/20 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div>
+                  <h3 className="font-semibold">
+                    {event.name}
+                  </h3>
+
+                  <p className="mt-1 text-xs text-white/35">
+                    {event.type}
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between gap-5 sm:justify-end">
+                  <span className="text-xs text-white/35">
+                    {event.teams}
+                  </span>
+
+                  <span
+                    className={`rounded-full border px-3 py-1 text-[9px] font-bold tracking-widest ${
+                      event.status === "LIVE"
+                        ? "border-green-400/20 bg-green-400/5 text-green-400"
+                        : event.status === "OPEN"
+                        ? "border-blue-400/20 bg-blue-400/5 text-blue-300"
+                        : "border-white/10 text-white/30"
+                    }`}
+                  >
+                    {event.status}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="mt-8 grid gap-4 md:grid-cols-2">
+          <Link
+            href="/organizer/create"
+            className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-white/20 hover:bg-white/[0.05]"
+          >
+            <p className="text-xs font-bold uppercase tracking-widest text-white/30">
+              Event Management
+            </p>
+
+            <h3 className="mt-3 text-xl font-bold">
+              Create a Competition
+            </h3>
+
+            <p className="mt-2 text-sm leading-6 text-white/35">
+              Configure event details, team limits and competition settings.
+            </p>
+          </Link>
+
+          <Link
+            href="/organizer/create/rounds"
+            className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-white/20 hover:bg-white/[0.05]"
+          >
+            <p className="text-xs font-bold uppercase tracking-widest text-white/30">
+              Competition Setup
+            </p>
+
+            <h3 className="mt-3 text-xl font-bold">
+              Manage Rounds
+            </h3>
+
+            <p className="mt-2 text-sm leading-6 text-white/35">
+              Add rounds and define how teams progress through your event.
+            </p>
+          </Link>
+        </div>
       </section>
-
     </main>
-  );
-}
-
-
-/* STAT */
-
-function Stat({ label, value }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-black p-5">
-
-      <p className="text-xs uppercase tracking-wider text-gray-500">
-        {label}
-      </p>
-
-      <p className="mt-3 text-2xl font-bold">
-        {value}
-      </p>
-
-    </div>
-  );
-}
-
-
-/* DASHBOARD ACTION */
-
-function DashboardAction({ title, description }) {
-  return (
-    <button
-      type="button"
-      onClick={() => alert(`${title} will be built next.`)}
-      className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-left transition hover:border-cyan-400/40"
-    >
-
-      <h3 className="font-bold">
-        {title}
-      </h3>
-
-      <p className="mt-2 text-sm leading-6 text-gray-500">
-        {description}
-      </p>
-
-    </button>
   );
 }
