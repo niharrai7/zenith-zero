@@ -1,223 +1,298 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
-export default function CreateCompetition() {
-  const [competitionName, setCompetitionName] = useState("");
+export default function CreateEventPage() {
+  const [eventName, setEventName] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("Technical Challenge");
+  const [format, setFormat] = useState("Live Competition");
   const [teamSize, setTeamSize] = useState("2 - 4");
-  const [mode, setMode] = useState("Online");
+  const [maxTeams, setMaxTeams] = useState("20");
+  const [deadline, setDeadline] = useState("");
+  const [saved, setSaved] = useState(false);
 
-  const handleCreate = (event) => {
-    event.preventDefault();
+  function handleSubmit(e) {
+    e.preventDefault();
 
-    if (!competitionName || !description) {
-      alert("Please fill all required fields.");
+    if (!eventName.trim()) {
+      alert("Please enter an event name.");
       return;
     }
 
-    const competition = {
-      name: competitionName,
-      description: description,
-      teamSize: teamSize,
-      mode: mode,
-    };
-
-    localStorage.setItem(
-      "zenithCompetition",
-      JSON.stringify(competition)
-    );
-
-    alert("Competition details saved!");
-  };
+    setSaved(true);
+  }
 
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-[#050505] text-white">
+      {/* Navbar */}
+      <nav className="border-b border-white/10">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-5 sm:px-8">
+          <Link
+            href="/"
+            className="text-xl font-black tracking-tight"
+          >
+            ZENITH<span className="text-white/40">ZERO</span>
+          </Link>
 
-      {/* NAVBAR */}
-
-      <nav className="flex items-center justify-between border-b border-white/10 px-8 py-6">
-
-        <a
-          href="/"
-          className="text-2xl font-bold tracking-wider"
-        >
-          ZENITH<span className="text-cyan-400">ZERO</span>
-        </a>
-
-        <a
-          href="/events"
-          className="text-sm text-gray-400 transition hover:text-cyan-400"
-        >
-          Events
-        </a>
-
+          <Link
+            href="/organizer"
+            className="text-sm text-white/50 transition hover:text-white"
+          >
+            ← Dashboard
+          </Link>
+        </div>
       </nav>
 
-
-      {/* HEADER */}
-
-      <section className="px-6 py-16">
-
-        <div className="mx-auto max-w-4xl">
-
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">
-            Organizer
+      <section className="mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-16">
+        {/* Header */}
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/30">
+            Organizer Console
           </p>
 
-          <h1 className="mt-4 text-5xl font-black">
-            Create Competition
+          <h1 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+            Create Event
           </h1>
 
-          <p className="mt-4 max-w-2xl text-gray-400">
-            Set up your competition before adding rounds,
-            questions, teams and scoring.
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-white/40">
+            Configure your competition, define participation rules and
+            prepare your event for registration.
           </p>
+        </div>
 
-
-          {/* FORM */}
-
-          <form
-            onSubmit={handleCreate}
-            className="mt-12 rounded-3xl border border-white/10 bg-white/[0.03] p-8"
-          >
-
-            {/* NAME */}
-
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="mt-10 space-y-6">
+          {/* Basic Information */}
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-8">
             <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/30">
+                Step 01
+              </p>
 
-              <label className="text-sm text-gray-400">
-                Competition Name *
-              </label>
+              <h2 className="mt-2 text-xl font-bold">
+                Basic Information
+              </h2>
 
-              <input
-                type="text"
-                value={competitionName}
-                onChange={(e) =>
-                  setCompetitionName(e.target.value)
-                }
-                placeholder="Example: Zenith Tech Challenge"
-                className="mt-2 w-full rounded-xl border border-white/10 bg-black px-4 py-4 outline-none transition placeholder:text-gray-600 focus:border-cyan-400"
-              />
-
+              <p className="mt-1 text-sm text-white/35">
+                Tell participants what your competition is about.
+              </p>
             </div>
 
+            <div className="mt-7 space-y-5">
+              <div>
+                <label className="text-xs font-semibold text-white/60">
+                  Event Name
+                </label>
 
-            {/* DESCRIPTION */}
-
-            <div className="mt-6">
-
-              <label className="text-sm text-gray-400">
-                Description *
-              </label>
-
-              <textarea
-                value={description}
-                onChange={(e) =>
-                  setDescription(e.target.value)
-                }
-                placeholder="Describe your competition..."
-                rows={5}
-                className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black px-4 py-4 outline-none transition placeholder:text-gray-600 focus:border-cyan-400"
-              />
-
-            </div>
-
-
-            {/* TEAM SIZE */}
-
-            <div className="mt-6">
-
-              <label className="text-sm text-gray-400">
-                Team Size
-              </label>
-
-              <select
-                value={teamSize}
-                onChange={(e) =>
-                  setTeamSize(e.target.value)
-                }
-                className="mt-2 w-full rounded-xl border border-white/10 bg-black px-4 py-4 outline-none focus:border-cyan-400"
-              >
-
-                <option>Individual</option>
-                <option>2 Members</option>
-                <option>2 - 4</option>
-                <option>3 - 5</option>
-                <option>4 - 6</option>
-
-              </select>
-
-            </div>
-
-
-            {/* MODE */}
-
-            <div className="mt-6">
-
-              <label className="text-sm text-gray-400">
-                Competition Mode
-              </label>
-
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
-
-                <button
-                  type="button"
-                  onClick={() => setMode("Online")}
-                  className={`rounded-xl border p-4 text-left transition ${
-                    mode === "Online"
-                      ? "border-cyan-400 bg-cyan-400/10 text-cyan-400"
-                      : "border-white/10 text-gray-400 hover:border-white/30"
-                  }`}
-                >
-                  <p className="font-bold">
-                    Online
-                  </p>
-
-                  <p className="mt-1 text-xs text-gray-500">
-                    Participants compete remotely.
-                  </p>
-                </button>
-
-
-                <button
-                  type="button"
-                  onClick={() => setMode("Offline")}
-                  className={`rounded-xl border p-4 text-left transition ${
-                    mode === "Offline"
-                      ? "border-cyan-400 bg-cyan-400/10 text-cyan-400"
-                      : "border-white/10 text-gray-400 hover:border-white/30"
-                  }`}
-                >
-                  <p className="font-bold">
-                    Offline
-                  </p>
-
-                  <p className="mt-1 text-xs text-gray-500">
-                    Participants compete at a venue.
-                  </p>
-                </button>
-
+                <input
+                  value={eventName}
+                  onChange={(e) => setEventName(e.target.value)}
+                  placeholder="e.g. Zenith Quiz Arena"
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3.5 text-sm outline-none transition placeholder:text-white/20 focus:border-white/30"
+                />
               </div>
 
+              <div>
+                <label className="text-xs font-semibold text-white/60">
+                  Description
+                </label>
+
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Describe your competition..."
+                  rows={5}
+                  className="mt-2 w-full resize-none rounded-2xl border border-white/10 bg-black/30 px-4 py-3.5 text-sm outline-none transition placeholder:text-white/20 focus:border-white/30"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Competition Settings */}
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-8">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/30">
+                Step 02
+              </p>
+
+              <h2 className="mt-2 text-xl font-bold">
+                Competition Settings
+              </h2>
+
+              <p className="mt-1 text-sm text-white/35">
+                Define how your competition will be conducted.
+              </p>
             </div>
 
+            <div className="mt-7 grid gap-5 md:grid-cols-2">
+              <div>
+                <label className="text-xs font-semibold text-white/60">
+                  Category
+                </label>
 
-            {/* CREATE */}
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-[#0a0a0a] px-4 py-3.5 text-sm outline-none focus:border-white/30"
+                >
+                  <option>Technical Challenge</option>
+                  <option>Hackathon</option>
+                  <option>Quiz</option>
+                  <option>Cyber Security</option>
+                  <option>Trivia</option>
+                  <option>Workshop</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-white/60">
+                  Format
+                </label>
+
+                <select
+                  value={format}
+                  onChange={(e) => setFormat(e.target.value)}
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-[#0a0a0a] px-4 py-3.5 text-sm outline-none focus:border-white/30"
+                >
+                  <option>Live Competition</option>
+                  <option>Timed Competition</option>
+                  <option>Self Paced</option>
+                  <option>Hybrid</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-white/60">
+                  Team Size
+                </label>
+
+                <select
+                  value={teamSize}
+                  onChange={(e) => setTeamSize(e.target.value)}
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-[#0a0a0a] px-4 py-3.5 text-sm outline-none focus:border-white/30"
+                >
+                  <option>Individual</option>
+                  <option>2 - 4</option>
+                  <option>2 - 5</option>
+                  <option>3 - 6</option>
+                  <option>4 - 8</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-white/60">
+                  Maximum Teams
+                </label>
+
+                <input
+                  type="number"
+                  min="1"
+                  value={maxTeams}
+                  onChange={(e) => setMaxTeams(e.target.value)}
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3.5 text-sm outline-none focus:border-white/30"
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="text-xs font-semibold text-white/60">
+                  Registration Deadline
+                </label>
+
+                <input
+                  type="datetime-local"
+                  value={deadline}
+                  onChange={(e) => setDeadline(e.target.value)}
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3.5 text-sm outline-none focus:border-white/30"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Preview */}
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-8">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/30">
+                Live Preview
+              </p>
+
+              <h2 className="mt-2 text-xl font-bold">
+                Event Card
+              </h2>
+            </div>
+
+            <div className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-5">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-full border border-green-400/20 bg-green-400/5 px-3 py-1 text-[9px] font-bold tracking-widest text-green-400">
+                  OPEN
+                </span>
+
+                <span className="text-xs text-white/30">
+                  {category}
+                </span>
+              </div>
+
+              <h3 className="mt-4 text-2xl font-black">
+                {eventName || "Your Event Name"}
+              </h3>
+
+              <p className="mt-2 text-sm leading-6 text-white/40">
+                {description ||
+                  "Your event description will appear here."}
+              </p>
+
+              <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                <Info label="Format" value={format} />
+                <Info label="Team Size" value={teamSize} />
+                <Info label="Max Teams" value={maxTeams} />
+                <Info
+                  label="Deadline"
+                  value={deadline ? "Scheduled" : "Not set"}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+            <Link
+              href="/organizer"
+              className="rounded-2xl border border-white/10 px-6 py-3.5 text-center text-sm font-semibold text-white/60 transition hover:border-white/20 hover:text-white"
+            >
+              Cancel
+            </Link>
 
             <button
               type="submit"
-              className="mt-10 w-full rounded-xl bg-cyan-400 py-4 font-bold text-black transition hover:bg-cyan-300"
+              className="rounded-2xl bg-white px-6 py-3.5 text-sm font-bold text-black transition hover:bg-white/90"
             >
-              Save Competition
+              {saved ? "Event Saved ✓" : "Save Event →"}
             </button>
+          </div>
 
-          </form>
-
-        </div>
-
+          {saved && (
+            <div className="rounded-2xl border border-green-400/20 bg-green-400/5 p-4 text-center text-sm text-green-400">
+              Event configuration saved successfully. You can now manage
+              competition rounds.
+            </div>
+          )}
+        </form>
       </section>
-
     </main>
+  );
+}
+
+function Info({ label, value }) {
+  return (
+    <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
+      <p className="text-[9px] font-bold uppercase tracking-widest text-white/25">
+        {label}
+      </p>
+
+      <p className="mt-1 truncate text-xs font-semibold text-white/70">
+        {value}
+      </p>
+    </div>
   );
 }
