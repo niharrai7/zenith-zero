@@ -1,220 +1,120 @@
-export default function EventDetails() {
+"use client";
+
+import Link from "next/link";
+
+export default function EventDetailsPage() {
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-[#050505] text-white">
+      <nav className="border-b border-white/10">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
+          <Link href="/" className="text-xl font-black tracking-tight">
+            ZENITH<span className="text-white/40">ZERO</span>
+          </Link>
 
-      {/* Navbar */}
-      <nav className="flex items-center justify-between border-b border-white/10 px-8 py-6">
-
-        <a
-          href="/"
-          className="text-2xl font-bold tracking-wider"
-        >
-          ZENITH<span className="text-cyan-400">ZERO</span>
-        </a>
-
-        <div className="flex items-center gap-8 text-sm text-gray-300">
-
-          <a
-            href="/"
-            className="transition hover:text-cyan-400"
-          >
-            Home
-          </a>
-
-          <a
+          <Link
             href="/events"
-            className="text-cyan-400"
+            className="text-sm text-white/50 transition hover:text-white"
           >
-            Events
-          </a>
-
-          <a
-            href="/leaderboard"
-            className="transition hover:text-cyan-400"
-          >
-            Leaderboard
-          </a>
-
-          <a
-            href="/certificates"
-            className="transition hover:text-cyan-400"
-          >
-            Certificates
-          </a>
-
+            ← Back to Events
+          </Link>
         </div>
-
       </nav>
 
+      <section className="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-20">
+        <div className="grid gap-8 lg:grid-cols-[1.4fr_0.6fr]">
+          <div>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="rounded-full border border-white/10 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-white/50">
+                LIVE COMPETITION
+              </span>
 
-      {/* Event Hero */}
-      <section className="px-6 py-20">
-
-        <div className="mx-auto max-w-6xl">
-
-          <span className="rounded-full border border-cyan-400/30 px-4 py-2 text-xs font-semibold tracking-wider text-cyan-400">
-            LIVE QUIZ
-          </span>
-
-          <h1 className="mt-8 text-5xl font-black md:text-7xl">
-            Zenith Quiz Arena
-          </h1>
-
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-gray-400">
-            A real-time team competition where knowledge,
-            strategy and speed decide who reaches the top.
-          </p>
-
-
-          {/* Event Information */}
-          <div className="mt-12 grid gap-5 md:grid-cols-4">
-
-            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-              <p className="text-xs text-gray-500">
-                DATE
-              </p>
-
-              <p className="mt-3 font-semibold">
-                Coming Soon
-              </p>
+              <span className="text-xs font-bold text-green-400">
+                ● REGISTRATION OPEN
+              </span>
             </div>
 
+            <h1 className="mt-6 text-4xl font-black tracking-tight sm:text-6xl">
+              Zenith Quiz Arena
+            </h1>
 
-            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-              <p className="text-xs text-gray-500">
-                TEAM SIZE
-              </p>
+            <p className="mt-6 max-w-2xl text-base leading-8 text-white/50">
+              A competitive technical quiz designed to test programming,
+              computer science, technology and logical reasoning skills.
+            </p>
 
-              <p className="mt-3 font-semibold">
-                2 - 4 Members
-              </p>
+            <div className="mt-10 grid gap-4 sm:grid-cols-3">
+              <InfoCard title="Team Size" value="2 - 4" />
+              <InfoCard title="Format" value="Live" />
+              <InfoCard title="Difficulty" value="Mixed" />
             </div>
 
+            <div className="mt-12">
+              <h2 className="text-2xl font-bold">Competition Rules</h2>
 
-            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-              <p className="text-xs text-gray-500">
-                FORMAT
-              </p>
-
-              <p className="mt-3 font-semibold">
-                Live Competition
-              </p>
+              <div className="mt-5 space-y-3">
+                <Rule number="01" text="Create or join a team before the competition starts." />
+                <Rule number="02" text="Each team can have between 2 and 4 members." />
+                <Rule number="03" text="Questions are answered within the allotted time." />
+                <Rule number="04" text="Scores are calculated automatically after each round." />
+              </div>
             </div>
-
-
-            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-              <p className="text-xs text-gray-500">
-                STATUS
-              </p>
-
-              <p className="mt-3 font-semibold text-cyan-400">
-                Registration Open
-              </p>
-            </div>
-
           </div>
 
+          <aside className="h-fit rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-white/30">
+              Event Status
+            </p>
 
-          {/* Buttons */}
-          <div className="mt-12 flex flex-col gap-4 sm:flex-row">
+            <h2 className="mt-4 text-2xl font-bold">Registration Open</h2>
 
-            <a
+            <p className="mt-3 text-sm leading-6 text-white/40">
+              Build your team and join the competition lobby.
+            </p>
+
+            <Link
               href="/events/event/join"
-              className="rounded-full bg-cyan-400 px-8 py-4 text-center font-bold text-black transition hover:bg-cyan-300"
+              className="mt-8 flex w-full items-center justify-center rounded-2xl bg-white px-5 py-4 text-sm font-bold text-black transition hover:bg-white/90"
             >
-              Join Competition
-            </a>
+              Join Team
+            </Link>
 
-            <a
-              href="/events"
-              className="rounded-full border border-white/20 px-8 py-4 text-center font-bold transition hover:border-cyan-400 hover:text-cyan-400"
+            <Link
+              href="/events/event/team"
+              className="mt-3 flex w-full items-center justify-center rounded-2xl border border-white/10 px-5 py-4 text-sm font-semibold text-white transition hover:bg-white/5"
             >
-              Back to Events
-            </a>
+              Team Lobby
+            </Link>
 
-          </div>
+            <div className="mt-8 border-t border-white/10 pt-6">
+              <p className="text-xs text-white/30">Competition</p>
+              <p className="mt-2 text-sm font-semibold">Zenith Quiz Arena</p>
 
-        </div>
-
-      </section>
-
-
-      {/* About */}
-      <section className="border-t border-white/10 px-6 py-20">
-
-        <div className="mx-auto max-w-6xl">
-
-          <h2 className="text-3xl font-bold">
-            About the Competition
-          </h2>
-
-          <p className="mt-6 max-w-3xl leading-8 text-gray-400">
-            Zenith Quiz Arena is designed for teams that want
-            to compete under pressure. Questions appear live
-            for all participants and scores are calculated
-            throughout the competition.
-          </p>
-
-
-          {/* Rules */}
-          <div className="mt-14">
-
-            <h3 className="text-xl font-bold">
-              Competition Rules
-            </h3>
-
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-
-              <div className="rounded-xl border border-white/10 p-5 text-gray-400">
-                01 — Teams must contain 2 to 4 members.
-              </div>
-
-              <div className="rounded-xl border border-white/10 p-5 text-gray-400">
-                02 — Every question has a limited time.
-              </div>
-
-              <div className="rounded-xl border border-white/10 p-5 text-gray-400">
-                03 — Correct answers increase your score.
-              </div>
-
-              <div className="rounded-xl border border-white/10 p-5 text-gray-400">
-                04 — The leaderboard updates throughout the event.
-              </div>
-
-              <div className="rounded-xl border border-white/10 p-5 text-gray-400">
-                05 — Final rankings determine the winners.
-              </div>
-
-              <div className="rounded-xl border border-white/10 p-5 text-gray-400">
-                06 — Certificates are issued to participants.
-              </div>
-
+              <p className="mt-5 text-xs text-white/30">Team Format</p>
+              <p className="mt-2 text-sm font-semibold">2 - 4 Members</p>
             </div>
-
-          </div>
-
+          </aside>
         </div>
-
       </section>
-
-
-      {/* Footer */}
-      <footer className="border-t border-white/10 px-8 py-8">
-
-        <div className="mx-auto flex max-w-6xl justify-between text-sm text-gray-500">
-
-          <p>
-            © 2026 Zenith Zero
-          </p>
-
-          <p>
-            Compete. Conquer. Get Recognized.
-          </p>
-
-        </div>
-
-      </footer>
-
     </main>
+  );
+}
+
+function InfoCard({ title, value }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+      <p className="text-[10px] font-bold uppercase tracking-widest text-white/30">
+        {title}
+      </p>
+      <p className="mt-2 text-lg font-bold">{value}</p>
+    </div>
+  );
+}
+
+function Rule({ number, text }) {
+  return (
+    <div className="flex gap-4 rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+      <span className="text-xs font-bold text-white/30">{number}</span>
+      <p className="text-sm leading-6 text-white/55">{text}</p>
+    </div>
   );
 }
