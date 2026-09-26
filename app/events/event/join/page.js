@@ -2,30 +2,27 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
-export default function JoinTeamPage() {
-  const router = useRouter();
-
+export default function JoinEventPage() {
   const [teamCode, setTeamCode] = useState("");
+  const [participantName, setParticipantName] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("Participant");
+  const [loading, setLoading] = useState(false);
+  const [joined, setJoined] = useState(false);
   const [error, setError] = useState("");
-  const [joining, setJoining] = useState(false);
 
-  const handleCodeChange = (e) => {
-    const value = e.target.value
-      .toUpperCase()
-      .replace(/[^A-Z0-9]/g, "")
-      .slice(0, 7);
-
-    setTeamCode(value);
-    setError("");
-  };
-
-  const handleJoin = async (e) => {
+  function handleJoin(e) {
     e.preventDefault();
+    setError("");
 
-    if (!teamCode) {
-      setError("Please enter your team code.");
+    if (!participantName.trim()) {
+      setError("Please enter your name.");
+      return;
+    }
+
+    if (!email.trim() || !email.includes("@")) {
+      setError("Please enter a valid email address.");
       return;
     }
 
@@ -34,24 +31,18 @@ export default function JoinTeamPage() {
       return;
     }
 
-    setJoining(true);
+    setLoading(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 600));
-
-    if (teamCode !== "ZZU3ABD") {
-      setJoining(false);
-      setError("Team code not found. Check the code and try again.");
-      return;
-    }
-
-    router.push("/events/event/team");
-  };
+    setTimeout(() => {
+      setLoading(false);
+      setJoined(true);
+    }, 700);
+  }
 
   return (
     <main className="min-h-screen bg-[#050505] text-white">
-      {/* Navigation */}
       <nav className="border-b border-white/10">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-5 sm:px-8">
           <Link
             href="/"
             className="text-xl font-black tracking-tight"
@@ -60,99 +51,186 @@ export default function JoinTeamPage() {
           </Link>
 
           <Link
-            href="/events"
+            href="/events/event"
             className="text-sm text-white/50 transition hover:text-white"
           >
-            ← Events
+            ← Event
           </Link>
         </div>
       </nav>
 
-      {/* Main */}
-      <section className="flex min-h-[calc(100vh-77px)] items-center justify-center px-5 py-12 sm:px-8">
-        <div className="w-full max-w-md">
-          <div className="mb-8 text-center">
+      <section className="mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-16">
+        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+          {/* Form */}
+          <div>
             <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/30">
-              Team Access
+              Participant Registration
             </p>
 
-            <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">
-              Join a Team
+            <h1 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+              Join Event
             </h1>
 
-            <p className="mx-auto mt-4 max-w-sm text-sm leading-6 text-white/45">
-              Enter the 7-character team code shared by your team captain.
+            <p className="mt-3 max-w-xl text-sm leading-6 text-white/40">
+              Enter your details and connect with your competition team.
             </p>
+
+            <form
+              onSubmit={handleJoin}
+              className="mt-8 rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-8"
+            >
+              <div className="space-y-5">
+                <div>
+                  <label className="text-xs font-semibold text-white/60">
+                    Full Name
+                  </label>
+
+                  <input
+                    value={participantName}
+                    onChange={(e) => setParticipantName(e.target.value)}
+                    placeholder="Enter your name"
+                    className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3.5 text-sm outline-none placeholder:text-white/20 focus:border-white/30"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold text-white/60">
+                    Email Address
+                  </label>
+
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3.5 text-sm outline-none placeholder:text-white/20 focus:border-white/30"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold text-white/60">
+                    Team Role
+                  </label>
+
+                  <select
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="mt-2 w-full rounded-2xl border border-white/10 bg-[#0a0a0a] px-4 py-3.5 text-sm outline-none focus:border-white/30"
+                  >
+                    <option>Participant</option>
+                    <option>Captain</option>
+                    <option>Technical Lead</option>
+                    <option>Research Lead</option>
+                  </select>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-semibold text-white/60">
+                      Team Code
+                    </label>
+
+                    <span className="text-[10px] text-white/25">
+                      {teamCode.length}/7
+                    </span>
+                  </div>
+
+                  <input
+                    value={teamCode}
+                    maxLength={7}
+                    onChange={(e) =>
+                      setTeamCode(
+                        e.target.value
+                          .toUpperCase()
+                          .replace(/[^A-Z0-9]/g, "")
+                      )
+                    }
+                    placeholder="ZZU3ABD"
+                    className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3.5 font-mono text-sm tracking-[0.2em] outline-none placeholder:text-white/20 focus:border-white/30"
+                  />
+                </div>
+              </div>
+
+              {error && (
+                <div className="mt-5 rounded-2xl border border-red-400/20 bg-red-400/5 px-4 py-3 text-sm text-red-400">
+                  {error}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading || joined}
+                className="mt-6 w-full rounded-2xl bg-white px-5 py-4 text-sm font-bold text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {joined
+                  ? "Registration Complete ✓"
+                  : loading
+                  ? "Joining Team..."
+                  : "Join Competition →"}
+              </button>
+
+              {joined && (
+                <Link
+                  href="/events/event/team"
+                  className="mt-3 block rounded-2xl border border-white/10 px-5 py-4 text-center text-sm font-semibold text-white/60 transition hover:border-white/20 hover:text-white"
+                >
+                  Open Team Lobby
+                </Link>
+              )}
+            </form>
           </div>
 
-          <form
-            onSubmit={handleJoin}
-            className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8"
-          >
-            <label
-              htmlFor="teamCode"
-              className="text-xs font-bold uppercase tracking-widest text-white/40"
-            >
-              Team Code
-            </label>
-
-            <input
-              id="teamCode"
-              type="text"
-              value={teamCode}
-              onChange={handleCodeChange}
-              placeholder="ZZU3ABD"
-              maxLength={7}
-              autoComplete="off"
-              spellCheck="false"
-              className="mt-3 w-full rounded-2xl border border-white/10 bg-black/30 px-5 py-4 text-center text-xl font-black tracking-[0.3em] text-white outline-none transition placeholder:text-white/15 focus:border-white/30"
-            />
-
-            <div className="mt-3 flex items-center justify-between text-xs">
-              <span className="text-white/25">
-                {teamCode.length}/7 characters
+          {/* Event Card */}
+          <aside className="lg:pt-12">
+            <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+              <span className="rounded-full border border-green-400/20 bg-green-400/5 px-3 py-1 text-[9px] font-bold tracking-widest text-green-400">
+                REGISTRATION OPEN
               </span>
 
-              <span className="text-white/25">
-                Letters + numbers
-              </span>
+              <h2 className="mt-5 text-2xl font-black">
+                Zenith Quiz Arena
+              </h2>
+
+              <p className="mt-3 text-sm leading-6 text-white/40">
+                Test your technical knowledge and problem-solving ability
+                through multiple competitive rounds.
+              </p>
+
+              <div className="mt-7 space-y-4">
+                <Info label="Format" value="Live Competition" />
+                <Info label="Team Size" value="2 - 4 members" />
+                <Info label="Rounds" value="3" />
+                <Info label="Maximum Teams" value="20" />
+              </div>
             </div>
 
-            {error && (
-              <div className="mt-5 rounded-2xl border border-red-400/20 bg-red-400/5 px-4 py-3">
-                <p className="text-sm leading-5 text-red-300">
-                  {error}
-                </p>
-              </div>
-            )}
+            <div className="mt-4 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+              <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/30">
+                Demo Team Code
+              </p>
 
-            <button
-              type="submit"
-              disabled={joining}
-              className="mt-6 w-full rounded-2xl bg-white px-5 py-4 text-sm font-bold text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {joining ? "Joining Team..." : "Join Team"}
-            </button>
+              <p className="mt-3 font-mono text-xl font-black tracking-[0.2em]">
+                ZZU3ABD
+              </p>
 
-            <Link
-              href="/events"
-              className="mt-3 flex w-full items-center justify-center rounded-2xl border border-white/10 px-5 py-4 text-sm font-semibold text-white/60 transition hover:bg-white/5 hover:text-white"
-            >
-              Cancel
-            </Link>
-          </form>
-
-          <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-            <p className="text-xs font-bold uppercase tracking-widest text-white/30">
-              Demo Team Code
-            </p>
-
-            <p className="mt-2 font-mono text-sm font-bold tracking-[0.2em] text-white/60">
-              ZZU3ABD
-            </p>
-          </div>
+              <p className="mt-2 text-xs leading-5 text-white/30">
+                Use this code to test the participant registration flow.
+              </p>
+            </div>
+          </aside>
         </div>
       </section>
     </main>
+  );
+}
+
+function Info({ label, value }) {
+  return (
+    <div className="flex items-center justify-between gap-4 border-b border-white/5 pb-3 last:border-0 last:pb-0">
+      <span className="text-xs text-white/30">{label}</span>
+      <span className="text-xs font-semibold text-white/70">
+        {value}
+      </span>
+    </div>
   );
 }
