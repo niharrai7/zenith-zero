@@ -1,223 +1,349 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
-const roundTypes = [
+const initialRounds = [
   {
-    id: "quiz",
-    name: "MCQ Quiz",
-    description: "Multiple-choice questions with timed answers.",
+    id: 1,
+    name: "Qualification",
+    type: "Quiz",
+    duration: "30 min",
+    questions: "20",
+    status: "READY",
   },
   {
-    id: "rapid-fire",
-    name: "Rapid Fire",
-    description: "Fast questions with a short response window.",
-  },
-  {
-    id: "buzzer",
-    name: "Buzzer Round",
-    description: "Teams compete to buzz first and answer live.",
-  },
-  {
-    id: "coding",
-    name: "Coding Round",
-    description: "Solve programming problems within a time limit.",
-  },
-  {
-    id: "treasure",
-    name: "Treasure Hunt",
-    description: "Solve clues and progress through multiple stages.",
-  },
-  {
-    id: "custom",
-    name: "Custom Round",
-    description: "Create your own competition round format.",
+    id: 2,
+    name: "Semi Final",
+    type: "Technical",
+    duration: "45 min",
+    questions: "15",
+    status: "DRAFT",
   },
 ];
 
-export default function CompetitionRounds() {
-  const [selectedRounds, setSelectedRounds] = useState([]);
+export default function RoundsPage() {
+  const [rounds, setRounds] = useState(initialRounds);
+  const [showForm, setShowForm] = useState(false);
+  const [name, setName] = useState("");
+  const [type, setType] = useState("Quiz");
+  const [duration, setDuration] = useState("30");
+  const [questions, setQuestions] = useState("20");
 
-  const toggleRound = (roundId) => {
-    if (selectedRounds.includes(roundId)) {
-      setSelectedRounds(
-        selectedRounds.filter((id) => id !== roundId)
-      );
-    } else {
-      setSelectedRounds([
-        ...selectedRounds,
-        roundId,
-      ]);
-    }
-  };
+  function addRound(e) {
+    e.preventDefault();
 
-  const saveRounds = () => {
-    if (selectedRounds.length === 0) {
-      alert("Please select at least one round.");
+    if (!name.trim()) {
+      alert("Enter a round name.");
       return;
     }
 
-    const rounds = roundTypes.filter((round) =>
-      selectedRounds.includes(round.id)
-    );
+    const newRound = {
+      id: Date.now(),
+      name: name.trim(),
+      type,
+      duration: `${duration} min`,
+      questions,
+      status: "DRAFT",
+    };
 
-    localStorage.setItem(
-      "zenithRounds",
-      JSON.stringify(rounds)
-    );
+    setRounds([...rounds, newRound]);
+    setName("");
+    setType("Quiz");
+    setDuration("30");
+    setQuestions("20");
+    setShowForm(false);
+  }
 
-    alert("Rounds saved successfully!");
-  };
+  function deleteRound(id) {
+    setRounds(rounds.filter((round) => round.id !== id));
+  }
 
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-[#050505] text-white">
+      <nav className="border-b border-white/10">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
+          <Link
+            href="/"
+            className="text-xl font-black tracking-tight"
+          >
+            ZENITH<span className="text-white/40">ZERO</span>
+          </Link>
 
-      {/* NAVBAR */}
-
-      <nav className="flex items-center justify-between border-b border-white/10 px-8 py-6">
-
-        <a
-          href="/"
-          className="text-2xl font-bold tracking-wider"
-        >
-          ZENITH<span className="text-cyan-400">ZERO</span>
-        </a>
-
-        <a
-          href="/organizer/create"
-          className="text-sm text-gray-400 transition hover:text-cyan-400"
-        >
-          ← Competition Details
-        </a>
-
+          <Link
+            href="/organizer"
+            className="text-sm text-white/50 transition hover:text-white"
+          >
+            ← Dashboard
+          </Link>
+        </div>
       </nav>
 
+      <section className="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-16">
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/30">
+              Competition Setup
+            </p>
 
-      {/* HEADER */}
+            <h1 className="mt-3 text-4xl font-black tracking-tight sm:text-5xl">
+              Manage Rounds
+            </h1>
 
-      <section className="px-6 py-16">
-
-        <div className="mx-auto max-w-5xl">
-
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">
-            Competition Setup
-          </p>
-
-          <h1 className="mt-4 text-5xl font-black">
-            Choose Your Rounds
-          </h1>
-
-          <p className="mt-4 max-w-2xl text-gray-400">
-            Select the rounds that participants will play
-            in your competition.
-          </p>
-
-
-          {/* ROUND CARDS */}
-
-          <div className="mt-12 grid gap-5 md:grid-cols-2">
-
-            {roundTypes.map((round, index) => {
-
-              const selected =
-                selectedRounds.includes(round.id);
-
-              return (
-                <button
-                  key={round.id}
-                  type="button"
-                  onClick={() => toggleRound(round.id)}
-                  className={`text-left rounded-3xl border p-6 transition ${
-                    selected
-                      ? "border-cyan-400 bg-cyan-400/[0.08]"
-                      : "border-white/10 bg-white/[0.03] hover:border-white/30"
-                  }`}
-                >
-
-                  <div className="flex items-start justify-between">
-
-                    <div className="flex items-center gap-4">
-
-                      <div
-                        className={`flex h-10 w-10 items-center justify-center rounded-xl font-mono text-sm ${
-                          selected
-                            ? "bg-cyan-400 text-black"
-                            : "bg-white/10 text-gray-400"
-                        }`}
-                      >
-                        0{index + 1}
-                      </div>
-
-                      <h2 className="text-xl font-bold">
-                        {round.name}
-                      </h2>
-
-                    </div>
-
-
-                    <div
-                      className={`h-5 w-5 rounded-full border ${
-                        selected
-                          ? "border-cyan-400 bg-cyan-400"
-                          : "border-white/30"
-                      }`}
-                    />
-
-                  </div>
-
-
-                  <p className="mt-5 pl-14 text-sm leading-6 text-gray-500">
-                    {round.description}
-                  </p>
-
-
-                  {round.id === "buzzer" && (
-                    <div className="mt-5 ml-14 inline-block rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-400">
-                      Live Buzzer System
-                    </div>
-                  )}
-
-                </button>
-              );
-            })}
-
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-white/40">
+              Build the competition structure and decide how participants
+              progress through each stage.
+            </p>
           </div>
 
-
-          {/* SELECTED */}
-
-          <div className="mt-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-
-            <div className="flex items-center justify-between">
-
-              <div>
-
-                <p className="text-sm text-gray-500">
-                  SELECTED ROUNDS
-                </p>
-
-                <p className="mt-2 text-2xl font-bold">
-                  {selectedRounds.length}
-                </p>
-
-              </div>
-
-              <button
-                type="button"
-                onClick={saveRounds}
-                className="rounded-xl bg-cyan-400 px-7 py-4 font-bold text-black transition hover:bg-cyan-300"
-              >
-                Save Rounds
-              </button>
-
-            </div>
-
-          </div>
-
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="w-fit rounded-2xl bg-white px-5 py-3.5 text-sm font-bold text-black transition hover:bg-white/90"
+          >
+            {showForm ? "Close Form" : "+ Add Round"}
+          </button>
         </div>
 
-      </section>
+        {/* Event Summary */}
+        <div className="mt-10 rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-7">
+          <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-white/30">
+                Current Event
+              </p>
 
+              <h2 className="mt-2 text-2xl font-black">
+                Zenith Quiz Arena
+              </h2>
+
+              <p className="mt-1 text-sm text-white/35">
+                Live Competition · 2 - 4 members
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <Stat label="Rounds" value={rounds.length} />
+              <Stat label="Status" value="Draft" />
+            </div>
+          </div>
+        </div>
+
+        {/* Add Round Form */}
+        {showForm && (
+          <form
+            onSubmit={addRound}
+            className="mt-6 rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-8"
+          >
+            <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/30">
+              New Round
+            </p>
+
+            <h2 className="mt-2 text-xl font-bold">
+              Configure Round
+            </h2>
+
+            <div className="mt-7 grid gap-5 md:grid-cols-2">
+              <div>
+                <label className="text-xs font-semibold text-white/60">
+                  Round Name
+                </label>
+
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="e.g. Final Round"
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3.5 text-sm outline-none placeholder:text-white/20 focus:border-white/30"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-white/60">
+                  Round Type
+                </label>
+
+                <select
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-[#0a0a0a] px-4 py-3.5 text-sm outline-none focus:border-white/30"
+                >
+                  <option>Quiz</option>
+                  <option>Technical</option>
+                  <option>Coding</option>
+                  <option>Cyber Security</option>
+                  <option>Rapid Fire</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-white/60">
+                  Duration
+                </label>
+
+                <input
+                  type="number"
+                  min="1"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3.5 text-sm outline-none focus:border-white/30"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-white/60">
+                  Questions
+                </label>
+
+                <input
+                  type="number"
+                  min="1"
+                  value={questions}
+                  onChange={(e) => setQuestions(e.target.value)}
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3.5 text-sm outline-none focus:border-white/30"
+                />
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end">
+              <button
+                type="submit"
+                className="rounded-2xl bg-white px-6 py-3.5 text-sm font-bold text-black transition hover:bg-white/90"
+              >
+                Add Round
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* Round List */}
+        <div className="mt-8">
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold">
+                Competition Rounds
+              </h2>
+
+              <p className="mt-1 text-sm text-white/35">
+                Participants will progress through these stages.
+              </p>
+            </div>
+
+            <span className="text-xs text-white/25">
+              {rounds.length} configured
+            </span>
+          </div>
+
+          <div className="space-y-4">
+            {rounds.map((round, index) => (
+              <div
+                key={round.id}
+                className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 transition hover:border-white/20 sm:p-6"
+              >
+                <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-sm font-black">
+                      {String(index + 1).padStart(2, "0")}
+                    </div>
+
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="text-lg font-bold">
+                          {round.name}
+                        </h3>
+
+                        <span
+                          className={`rounded-full border px-2.5 py-1 text-[8px] font-bold tracking-widest ${
+                            round.status === "READY"
+                              ? "border-green-400/20 bg-green-400/5 text-green-400"
+                              : "border-white/10 text-white/30"
+                          }`}
+                        >
+                          {round.status}
+                        </span>
+                      </div>
+
+                      <p className="mt-1 text-sm text-white/35">
+                        {round.type} round
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-5">
+                    <Info
+                      label="Duration"
+                      value={round.duration}
+                    />
+
+                    <Info
+                      label="Questions"
+                      value={round.questions}
+                    />
+
+                    <button
+                      onClick={() => deleteRound(round.id)}
+                      className="text-xs font-semibold text-red-400/60 transition hover:text-red-400"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {rounds.length === 0 && (
+              <div className="rounded-3xl border border-dashed border-white/10 p-10 text-center">
+                <p className="text-sm text-white/30">
+                  No rounds configured yet.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Bottom Actions */}
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-end">
+          <Link
+            href="/organizer"
+            className="rounded-2xl border border-white/10 px-6 py-3.5 text-center text-sm font-semibold text-white/60 transition hover:border-white/20 hover:text-white"
+          >
+            Back to Dashboard
+          </Link>
+
+          <button
+            onClick={() =>
+              alert(`${rounds.length} rounds saved successfully.`)
+            }
+            className="rounded-2xl bg-white px-6 py-3.5 text-sm font-bold text-black transition hover:bg-white/90"
+          >
+            Save Competition Structure →
+          </button>
+        </div>
+      </section>
     </main>
+  );
+}
+
+function Stat({ label, value }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3">
+      <p className="text-[9px] font-bold uppercase tracking-widest text-white/25">
+        {label}
+      </p>
+
+      <p className="mt-1 text-sm font-bold">{value}</p>
+    </div>
+  );
+}
+
+function Info({ label, value }) {
+  return (
+    <div className="hidden sm:block">
+      <p className="text-[9px] font-bold uppercase tracking-widest text-white/25">
+        {label}
+      </p>
+
+      <p className="mt-1 text-sm font-semibold text-white/70">
+        {value}
+      </p>
+    </div>
   );
 }
